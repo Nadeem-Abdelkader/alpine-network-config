@@ -175,10 +175,7 @@ def make_form(root, fields):
                 if type(data[field]) == list:
                     for j in data[field]:
                         # print(data[field])
-                        if j == data[field][-1]:
-                            ent.insert(0, j + ", ")
-                        else:
-                            ent.insert(0, j)
+                        ent.insert(0, j + ", ")
                 else:
                     ent.insert(0, data[field])
         ent.insert(0, "")
@@ -197,13 +194,22 @@ def read(ents):
     :return: void
     """
     # data = read_txt_to_lst("answers.txt")
-    data = read_to_dict_1("input_dir/answers.txt")
+
+    data = read_to_dict_2()
     for i in range(len(FIELDS_2)):
         ents[FIELDS_2[i]].delete(0, 'end')
-        # if data[FIELDS[i]].startswith("-"):
-        #     ents[FIELDS[i]].insert(0, data[FIELDS[i]][3:])
-        # else:
-        #     ents[FIELDS[i]].insert(0, data[FIELDS[i]])
+        if FIELDS_2[i] == 'nameserver':
+            # data[FIELDS_2[i]] = data[FIELDS_2[i]].replace(" ", "")
+            # data[FIELDS_2[i]] = data[FIELDS_2[i]].split(",")
+            # data[FIELDS_2[i]] = data[FIELDS_2[i]][::-1]
+            data[FIELDS_2[i]] = list(dict.fromkeys(data[FIELDS_2[i]]))
+            for j in data[FIELDS_2[i]]:
+                    ents[FIELDS_2[i]].insert(0, j + ", ")
+        else:
+            if data[FIELDS_2[i]].startswith("-"):
+                ents[FIELDS_2[i]].insert(0, data[FIELDS_2[i]][3:])
+            else:
+                ents[FIELDS_2[i]].insert(0, data[FIELDS_2[i]])
     txt_result.config(text="Successfully read data!", fg="green")
     return
 
@@ -302,7 +308,7 @@ def submit(entries):
                     dict[FIELDS_2[i]] = dict[FIELDS_2[i]].split(",")
                     dict[FIELDS_2[i]] = dict[FIELDS_2[i]][::-1]
                     for j in dict[FIELDS_2[i]]:
-                        print(j)
+                        # print(j)
                         resolve_file.write(FIELDS_2[i] + "       " + j + "\n")
             if FIELDS_2[i] == 'hostname':
                 host_file.write(FIELDS_2[i] + "           " + dict[FIELDS_2[i]] + "\n")

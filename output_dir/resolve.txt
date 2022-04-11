@@ -1,3 +1,5 @@
 domain           doc.com
+nameserver       
 nameserver       0.0.0.0
 nameserver       111.22.3.5
+nameserver       111.22.3.6
