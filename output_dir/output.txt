@@ -1,0 +1,9 @@
+iface eth0
+inet static
+address 192.168.1.5
+netmask 255.255.255.0
+gateway 192.168.1.254
+domain doc.com
+nameserver 111.22.3.5, 0.0.0.0
+hostname myhost
+
