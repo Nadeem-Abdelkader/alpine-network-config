@@ -55,6 +55,74 @@ data_dict_2 = {
 }
 
 
+def write_answers_txt():
+    cont = True
+    # for i in range(len((entries))):
+    #     if entries[FIELDS[i]].get() == "":
+    #         cont = False
+    #         txt_result.config(
+    #             text="Please complete the required field!", fg="red")
+    # if entries[FIELDS[3]].get() != entries[FIELDS[4]].get():
+    #     cont = False
+    #     txt_result.config(text="Passwords do not match!", fg="red")
+
+    if cont:
+        dict = read_to_dict_1("input_dir/answers.txt")
+        #
+        # users_list = []
+        # if os.path.exists(USERS_FILENAME) and os.stat(USERS_FILENAME).st_size != 0:
+        #     users_list = read_from_json(USERS_FILENAME)
+        #     users_list.append(dict)
+        # else:
+        #     users_list.append(dict)
+
+        # print(dict)
+
+        # filename = str(entries[FIELDS_1[0]].get()).replace(" ", "") + ".json"
+        # filename = "/Users/nadeem/Documents/Khwarizm/Alpine/alpine-install/records/" + filename
+        filename = OUTPUT_DIR + "answers.txt"
+        # with open(filename,
+        #           "w") as write_file:  # change "w" to "a" if you want to append instead of overwrite
+        #     json.dump(dict, write_file, indent=4)
+        comments = ["# Example answer file for setup-alpine script\n"
+                    "# If you don't want to use a certain option, then comment it out\n\n"
+                    "# Use US layout with US variant\n",
+                    "\n# Set hostname to alpine-test\n",
+                    "\n# Contents of /etc/network/interfaces\n",
+                    "\n# Search domain of example.com, Google public nameserver\n",
+                    "\n# Set timezone to UTC\n",
+                    "\n# set http/ftp proxy\n",
+                    "\n# Add a random mirror\n",
+                    "\n# Install Openssh\n",
+                    "\n# Use openntpd\n",
+                    "\n# Use /dev/sda as a data disk\n",
+                    "\n# Setup in /media/sdb1\n"
+                    ]
+        with open(filename, 'w') as file:
+            for i in range(len(FIELDS_1)):
+                if i < len(comments):
+                    file.write(comments[i])
+                if i == 1:
+                    file.write(FIELDS_1[i] + "=\"-n " + dict[FIELDS_1[i]] + "\"")
+                elif i == 3:
+                    file.write(FIELDS_1[i] + "=\"-d " + dict[FIELDS_1[i]] + "\"")
+                elif i == 4:
+                    file.write(FIELDS_1[i] + "=\"-z " + dict[FIELDS_1[i]] + "\"")
+                elif i == 6:
+                    file.write(FIELDS_1[i] + "=\"-r" + dict[FIELDS_1[i]] + "\"")
+                elif i == 7:
+                    file.write(FIELDS_1[i] + "=\"-c " + dict[FIELDS_1[i]] + "\"")
+                elif i == 8:
+                    file.write(FIELDS_1[i] + "=\"-c " + dict[FIELDS_1[i]] + "\"")
+                elif i == 9:
+                    file.write(FIELDS_1[i] + "=\"-m " + dict[FIELDS_1[i]] + "\"")
+                else:
+                    file.write(FIELDS_1[i] + "=\"" + dict[FIELDS_1[i]] + "\"")
+                file.write("\n")
+            file.write("\n")
+    return
+
+
 def read_to_dict_1(filename):
     """
     This function reads data from a txt file to a dictionary
@@ -67,7 +135,10 @@ def read_to_dict_1(filename):
     for i in range(len(f)):
         for j in range(len(FIELDS_1)):
             if f[i].endswith(FIELDS_1[j] + "="):
-                data_dict_1[FIELDS_1[j]] = f[i + 1]
+                if f[i + 1].startswith("-"):
+                    data_dict_1[FIELDS_1[j]] = f[i + 1][3:]
+                else:
+                    data_dict_1[FIELDS_1[j]] = f[i + 1]
     return data_dict_1
 
 
@@ -106,13 +177,25 @@ def read_to_dict_2():
                         data_dict_2[FIELDS_2[j]].append(str(f[i + 1]))
                     else:
                         data_dict_2[FIELDS_2[j]] = f[i + 1]
+    filename = "input_dir/host.txt"
+    if filename == "input_dir/host.txt":
+        f = open(filename, 'r')
+        f = f.read()
+        f = f.replace("\n", "")
+        f = f.split("           ")
+        print(f)
+        for i in range(len(f)):
+            for j in range(len(FIELDS_2)):
+                if f[i] == FIELDS_2[j]:
+                    data_dict_2[FIELDS_2[j]] = f[i + 1]
     # TEMPORARY
-    data_dict_2['hostname'] = "myhost"
+    # data_dict_2['hostname'] = "myhost"
     return data_dict_2
 
 
-# data1 = read_to_dict_1("answers.txt")
+# data1 = read_to_dict_1("input_dir/answers.txt")
 # print(data1)
+
 
 # data2 = read_to_dict_2()
 # print(data2)
@@ -204,7 +287,7 @@ def read(ents):
             # data[FIELDS_2[i]] = data[FIELDS_2[i]][::-1]
             data[FIELDS_2[i]] = list(dict.fromkeys(data[FIELDS_2[i]]))
             for j in data[FIELDS_2[i]]:
-                    ents[FIELDS_2[i]].insert(0, j + ", ")
+                ents[FIELDS_2[i]].insert(0, j + ", ")
         else:
             if data[FIELDS_2[i]].startswith("-"):
                 ents[FIELDS_2[i]].insert(0, data[FIELDS_2[i]][3:])
@@ -295,7 +378,7 @@ def submit(entries):
         resolve_file = open(resolve_file, 'w')
         host_file = open(host_file, 'w')
         for i in range(len(FIELDS_2)):
-            if FIELDS_2[i] in ['iface' , 'inet', 'address', 'netmask', 'gateway']:
+            if FIELDS_2[i] in ['iface', 'inet', 'address', 'netmask', 'gateway']:
                 if i >= 1:
                     interfaces_file.write(FIELDS_2[i] + " " + dict[FIELDS_2[i]] + "\n")
                 else:
@@ -309,10 +392,10 @@ def submit(entries):
                     dict[FIELDS_2[i]] = dict[FIELDS_2[i]][::-1]
                     for j in dict[FIELDS_2[i]]:
                         # print(j)
-                        resolve_file.write(FIELDS_2[i] + "       " + j + "\n")
+                        if j != "":
+                            resolve_file.write(FIELDS_2[i] + "       " + j + "\n")
             if FIELDS_2[i] == 'hostname':
                 host_file.write(FIELDS_2[i] + "           " + dict[FIELDS_2[i]] + "\n")
-
 
         # interfaces_file.write("\n")
         # resolve_file.write("\n")
@@ -322,7 +405,7 @@ def submit(entries):
         # jsonFile = open(USERS_FILENAME, "w")
         # jsonFile.write(jsonString)
         # jsonFile.close()
-
+        write_answers_txt()
         txt_result.config(text="Successfully submitted data!", fg="green")
 
         clear(entries, True)
