@@ -1,0 +1,24 @@
+# Example answer file for setup-alpine script
+# If you don't want to use a certain option, then comment it out
+
+# Use US layout with US variant
+iface=""
+
+# Set hostname to alpine-test
+inet="-n "
+
+# Contents of /etc/network/interfaces
+address=""
+
+# Search domain of example.com, Google public nameserver
+netmask="-d "
+
+# Set timezone to UTC
+gateway="-z "
+
+# set http/ftp proxy
+DNSOPTS=""
+
+# Add a random mirror
+HOSTNAMEOPTS="-r"
+
