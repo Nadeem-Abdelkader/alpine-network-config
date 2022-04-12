@@ -28,6 +28,8 @@ DISPlAY_FIELDS = ['Interface', 'Internet Networking', 'IP address', 'Netmask', '
 INPUT_DIR = "/Users/nadeem/Documents/Khwarizm/Alpine/alpine-network-config/input_dir/"
 OUTPUT_DIR = "/Users/nadeem/Documents/Khwarizm/Alpine/alpine-network-config/output_dir/"
 
+MANUAL = False
+
 data_dict_1 = {
     FIELDS_1[0]: None,
     FIELDS_1[1]: None,
@@ -262,9 +264,15 @@ def make_form(root, fields):
                 else:
                     ent.insert(0, data[field])
         ent.insert(0, "")
-        row.pack(side=TOP, fill=X, padx=25, pady=5)
-        lab.pack(side=LEFT)
-        ent.pack(side=RIGHT, expand=YES, fill=X)
+        if MANUAL:
+            row.pack(side=TOP, fill=X, padx=25, pady=5)
+            lab.pack(side=LEFT)
+            ent.pack(side=RIGHT, expand=YES, fill=X)
+        else:
+            if field in ['hostname', 'domain', 'nameserver']:
+                row.pack(side=TOP, fill=X, padx=25, pady=5)
+                lab.pack(side=LEFT)
+                ent.pack(side=RIGHT, expand=YES, fill=X)
         entries[field] = ent
         i += 1
     return entries
