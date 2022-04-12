@@ -183,7 +183,7 @@ def read_to_dict_2():
         f = f.read()
         f = f.replace("\n", "")
         f = f.split("           ")
-        print(f)
+        # print(f)
         for i in range(len(f)):
             for j in range(len(FIELDS_2)):
                 if f[i] == FIELDS_2[j]:
