@@ -28,7 +28,7 @@ DISPlAY_FIELDS = ['Interface', 'Internet Networking', 'IP address', 'Netmask', '
 INPUT_DIR = "/Users/nadeem/Documents/Khwarizm/Alpine/alpine-network-config/input_dir/"
 OUTPUT_DIR = "/Users/nadeem/Documents/Khwarizm/Alpine/alpine-network-config/output_dir/"
 
-MANUAL = False
+MANUAL = True
 
 data_dict_1 = {
     FIELDS_1[0]: None,
