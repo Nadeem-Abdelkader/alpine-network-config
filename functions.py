@@ -536,7 +536,7 @@ def initialise_window():
     global my_root, my_ents
     my_root = Tk()
     my_ents = make_form(my_root, FIELDS_2)
-    my_root.geometry("800x450")
+    my_root.geometry("800x425")
     my_root.title("Khwarizm Consulting")
     # root.bind('<Return>', (lambda event, e=ents: fetch(e)))
     return my_root
