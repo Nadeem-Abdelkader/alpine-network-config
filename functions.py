@@ -25,19 +25,25 @@ FIELDS_2 = ['iface', 'inet', 'address', 'netmask', 'gateway', 'domain', 'nameser
 DISPlAY_FIELDS = ['Interface', 'Internet Networking', 'IP address', 'Netmask', 'Gateway', 'Domain', 'Name Servers',
                   'Host Name']
 
-INPUT_DIR = os.getcwd() + "/input_dir/"
-OUTPUT_DIR = os.getcwd() + "/output_dir/"
+# INPUT_DIR = os.getcwd() + "/input_dir/"
+# OUTPUT_DIR = os.getcwd() + "/output_dir/"
+BASE_DIR = os.getcwd() + "/tmp/"
 
-ANSWERS_INPUT_FILE = INPUT_DIR + "answers.txt"
-ANSWERS_OUTPUT_FILE = OUTPUT_DIR + "answers.txt"
-DHCP_INPUT_FILE = INPUT_DIR + "dhcp.txt"
-DHCP_OUTPUT_FILE = OUTPUT_DIR + "dhcp.txt"
-HOST_INPUT_FILE = INPUT_DIR + "host.txt"
-HOST_OUTPUT_FILE = OUTPUT_DIR + "host.txt"
-INTERFACES_INPUT_FILE = INPUT_DIR + "interfaces.txt"
-INTERFACES_OUTPUT_FILE = OUTPUT_DIR + "interfaces.txt"
-RESOLVE_INPUT_FILE = INPUT_DIR + "resolve.txt"
-RESOLVE_OUTPUT_FILE = OUTPUT_DIR + "resolve.txt"
+ANSWERS_FILE = BASE_DIR + "answers.txt"
+HOST_FILE = BASE_DIR + "host.txt"
+INTERFACES_FILE = BASE_DIR + "interfaces.txt"
+RESOLVE_FILE = BASE_DIR + "resolve.txt"
+
+# ANSWERS_INPUT_FILE = INPUT_DIR + "answers.txt"
+# ANSWERS_OUTPUT_FILE = OUTPUT_DIR + "answers.txt"
+# DHCP_INPUT_FILE = INPUT_DIR + "dhcp.txt"
+# DHCP_OUTPUT_FILE = OUTPUT_DIR + "dhcp.txt"
+# HOST_INPUT_FILE = INPUT_DIR + "host.txt"
+# HOST_OUTPUT_FILE = OUTPUT_DIR + "host.txt"
+# INTERFACES_INPUT_FILE = INPUT_DIR + "interfaces.txt"
+# INTERFACES_OUTPUT_FILE = OUTPUT_DIR + "interfaces.txt"
+# RESOLVE_INPUT_FILE = INPUT_DIR + "resolve.txt"
+# RESOLVE_OUTPUT_FILE = OUTPUT_DIR + "resolve.txt"
 
 MANUAL = True
 
@@ -83,7 +89,7 @@ def write_answers_txt():
     #     txt_result.config(text="Passwords do not match!", fg="red")
 
     if cont:
-        my_dict = read_to_dict_1(ANSWERS_INPUT_FILE)
+        my_dict = read_to_dict_1(ANSWERS_FILE)
         #
         # users_list = []
         # if os.path.exists(USERS_FILENAME) and os.stat(USERS_FILENAME).st_size != 0:
@@ -96,7 +102,7 @@ def write_answers_txt():
 
         # filename = str(entries[FIELDS_1[0]].get()).replace(" ", "") + ".json"
         # filename = "/Users/nadeem/Documents/Khwarizm/Alpine/alpine-install/records/" + filename
-        filename = ANSWERS_OUTPUT_FILE
+        filename = ANSWERS_FILE
         # with open(filename,
         #           "w") as write_file:  # change "w" to "a" if you want to append instead of overwrite
         #     json.dump(dict, write_file, indent=4)
@@ -163,10 +169,11 @@ def read_to_dict_2():
     This function reads data from a txt file to a dictionary
     :return: dictionary containing read data
     """
-    filename = INTERFACES_INPUT_FILE
+    filename = INTERFACES_FILE
+    data_dict_2['nameserver'] = []
     # print(filename)
-    # print(INTERFACES_INPUT_FILE)
-    if filename == INTERFACES_INPUT_FILE:
+    # print(INTERFACES_FILE)
+    if filename == INTERFACES_FILE:
         f = open(filename, 'r')
         f = f.read()
         f = f.replace('\n', ' ')
@@ -176,8 +183,8 @@ def read_to_dict_2():
             for j in range(len(FIELDS_2)):
                 if f[i] == FIELDS_2[j]:
                     data_dict_2[FIELDS_2[j]] = f[i + 1]
-    filename = RESOLVE_INPUT_FILE
-    if filename == RESOLVE_INPUT_FILE:
+    filename = RESOLVE_FILE
+    if filename == RESOLVE_FILE:
         f = open(filename, 'r')
         f = f.read()
         f = f.replace('\n', ' ')
@@ -194,8 +201,8 @@ def read_to_dict_2():
                         data_dict_2[FIELDS_2[j]].append(str(f[i + 1]))
                     else:
                         data_dict_2[FIELDS_2[j]] = str(f[i + 1])
-    filename = HOST_INPUT_FILE
-    if filename == HOST_INPUT_FILE:
+    filename = HOST_FILE
+    if filename == HOST_FILE:
         f = open(filename, 'r')
         f = f.read()
         f = f.replace("\n", "")
@@ -390,9 +397,9 @@ def submit(entries):
         # print(dict)
 
         # interfaces_file = str(entries[FIELDS_2[0]].get()).replace(" ", "") + ".json"
-        interfaces_file = INTERFACES_OUTPUT_FILE
-        resolve_file = RESOLVE_OUTPUT_FILE
-        host_file = HOST_OUTPUT_FILE
+        interfaces_file = INTERFACES_FILE
+        resolve_file = RESOLVE_FILE
+        host_file = HOST_FILE
 
         # with open(filename,
         #           "w") as write_file:  # change "w" to "a" if you want to append instead of overwrite
