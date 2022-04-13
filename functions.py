@@ -12,7 +12,7 @@ This file contains the helper function to be called from main.py
 """
 
 # importing the necessary libraries for working with json
-import json
+# import json
 import os
 from tkinter import Frame, Label, Entry, X, LEFT, RIGHT, YES, messagebox, Button, Tk, TOP
 
@@ -25,35 +25,49 @@ FIELDS_2 = ['iface', 'inet', 'address', 'netmask', 'gateway', 'domain', 'nameser
 DISPlAY_FIELDS = ['Interface', 'Internet Networking', 'IP address', 'Netmask', 'Gateway', 'Domain', 'Name Servers',
                   'Host Name']
 
-INPUT_DIR = "/Users/nadeem/Documents/Khwarizm/Alpine/alpine-network-config/input_dir/"
-OUTPUT_DIR = "/Users/nadeem/Documents/Khwarizm/Alpine/alpine-network-config/output_dir/"
+INPUT_DIR = os.getcwd() + "/input_dir/"
+OUTPUT_DIR = os.getcwd() + "/output_dir/"
+
+ANSWERS_INPUT_FILE = INPUT_DIR + "answers.txt"
+ANSWERS_OUTPUT_FILE = OUTPUT_DIR + "answers.txt"
+DHCP_INPUT_FILE = INPUT_DIR + "dhcp.txt"
+DHCP_OUTPUT_FILE = OUTPUT_DIR + "dhcp.txt"
+HOST_INPUT_FILE = INPUT_DIR + "host.txt"
+HOST_OUTPUT_FILE = OUTPUT_DIR + "host.txt"
+INTERFACES_INPUT_FILE = INPUT_DIR + "interfaces.txt"
+INTERFACES_OUTPUT_FILE = OUTPUT_DIR + "interfaces.txt"
+RESOLVE_INPUT_FILE = INPUT_DIR + "resolve.txt"
+RESOLVE_OUTPUT_FILE = OUTPUT_DIR + "resolve.txt"
 
 MANUAL = True
 
+global txt_result
+global my_ents
+
 data_dict_1 = {
-    FIELDS_1[0]: None,
-    FIELDS_1[1]: None,
-    FIELDS_1[2]: None,
-    FIELDS_1[3]: None,
-    FIELDS_1[4]: None,
-    FIELDS_1[5]: None,
-    FIELDS_1[6]: None,
-    FIELDS_1[7]: None,
-    FIELDS_1[8]: None,
-    FIELDS_1[9]: None,
-    FIELDS_1[10]: None,
-    FIELDS_1[11]: None,
+    FIELDS_1[0]: "",
+    FIELDS_1[1]: "",
+    FIELDS_1[2]: "",
+    FIELDS_1[3]: "",
+    FIELDS_1[4]: "",
+    FIELDS_1[5]: "",
+    FIELDS_1[6]: "",
+    FIELDS_1[7]: "",
+    FIELDS_1[8]: "",
+    FIELDS_1[9]: "",
+    FIELDS_1[10]: "",
+    FIELDS_1[11]: "",
 }
 
 data_dict_2 = {
-    FIELDS_2[0]: None,
-    FIELDS_2[1]: None,
-    FIELDS_2[2]: None,
-    FIELDS_2[3]: None,
-    FIELDS_2[4]: None,
-    FIELDS_2[5]: None,
+    FIELDS_2[0]: "",
+    FIELDS_2[1]: "",
+    FIELDS_2[2]: "",
+    FIELDS_2[3]: "",
+    FIELDS_2[4]: "",
+    FIELDS_2[5]: "",
     FIELDS_2[6]: [],
-    FIELDS_2[7]: None
+    FIELDS_2[7]: ""
 }
 
 
@@ -69,7 +83,7 @@ def write_answers_txt():
     #     txt_result.config(text="Passwords do not match!", fg="red")
 
     if cont:
-        dict = read_to_dict_1("input_dir/answers.txt")
+        my_dict = read_to_dict_1(ANSWERS_INPUT_FILE)
         #
         # users_list = []
         # if os.path.exists(USERS_FILENAME) and os.stat(USERS_FILENAME).st_size != 0:
@@ -82,7 +96,7 @@ def write_answers_txt():
 
         # filename = str(entries[FIELDS_1[0]].get()).replace(" ", "") + ".json"
         # filename = "/Users/nadeem/Documents/Khwarizm/Alpine/alpine-install/records/" + filename
-        filename = OUTPUT_DIR + "answers.txt"
+        filename = ANSWERS_OUTPUT_FILE
         # with open(filename,
         #           "w") as write_file:  # change "w" to "a" if you want to append instead of overwrite
         #     json.dump(dict, write_file, indent=4)
@@ -105,21 +119,21 @@ def write_answers_txt():
                 if i < len(comments):
                     file.write(comments[i])
                 if i == 1:
-                    file.write(FIELDS_1[i] + "=\"-n " + dict[FIELDS_1[i]] + "\"")
+                    file.write(FIELDS_1[i] + "=\"-n " + my_dict[FIELDS_1[i]] + "\"")
                 elif i == 3:
-                    file.write(FIELDS_1[i] + "=\"-d " + dict[FIELDS_1[i]] + "\"")
+                    file.write(FIELDS_1[i] + "=\"-d " + my_dict[FIELDS_1[i]] + "\"")
                 elif i == 4:
-                    file.write(FIELDS_1[i] + "=\"-z " + dict[FIELDS_1[i]] + "\"")
+                    file.write(FIELDS_1[i] + "=\"-z " + my_dict[FIELDS_1[i]] + "\"")
                 elif i == 6:
-                    file.write(FIELDS_1[i] + "=\"-r" + dict[FIELDS_1[i]] + "\"")
+                    file.write(FIELDS_1[i] + "=\"-r" + my_dict[FIELDS_1[i]] + "\"")
                 elif i == 7:
-                    file.write(FIELDS_1[i] + "=\"-c " + dict[FIELDS_1[i]] + "\"")
+                    file.write(FIELDS_1[i] + "=\"-c " + my_dict[FIELDS_1[i]] + "\"")
                 elif i == 8:
-                    file.write(FIELDS_1[i] + "=\"-c " + dict[FIELDS_1[i]] + "\"")
+                    file.write(FIELDS_1[i] + "=\"-c " + my_dict[FIELDS_1[i]] + "\"")
                 elif i == 9:
-                    file.write(FIELDS_1[i] + "=\"-m " + dict[FIELDS_1[i]] + "\"")
+                    file.write(FIELDS_1[i] + "=\"-m " + my_dict[FIELDS_1[i]] + "\"")
                 else:
-                    file.write(FIELDS_1[i] + "=\"" + dict[FIELDS_1[i]] + "\"")
+                    file.write(FIELDS_1[i] + "=\"" + my_dict[FIELDS_1[i]] + "\"")
                 file.write("\n")
             file.write("\n")
     return
@@ -147,11 +161,12 @@ def read_to_dict_1(filename):
 def read_to_dict_2():
     """
     This function reads data from a txt file to a dictionary
-    :param filename: file to read from
-    :return: dictionary contining read data
+    :return: dictionary containing read data
     """
-    filename = "input_dir/interfaces.txt"
-    if filename == "input_dir/interfaces.txt":
+    filename = INTERFACES_INPUT_FILE
+    # print(filename)
+    # print(INTERFACES_INPUT_FILE)
+    if filename == INTERFACES_INPUT_FILE:
         f = open(filename, 'r')
         f = f.read()
         f = f.replace('\n', ' ')
@@ -161,8 +176,8 @@ def read_to_dict_2():
             for j in range(len(FIELDS_2)):
                 if f[i] == FIELDS_2[j]:
                     data_dict_2[FIELDS_2[j]] = f[i + 1]
-    filename = "input_dir/resolve.txt"
-    if filename == "input_dir/resolve.txt":
+    filename = RESOLVE_INPUT_FILE
+    if filename == RESOLVE_INPUT_FILE:
         f = open(filename, 'r')
         f = f.read()
         f = f.replace('\n', ' ')
@@ -178,9 +193,9 @@ def read_to_dict_2():
                     if FIELDS_2[j] == 'nameserver':
                         data_dict_2[FIELDS_2[j]].append(str(f[i + 1]))
                     else:
-                        data_dict_2[FIELDS_2[j]] = f[i + 1]
-    filename = "input_dir/host.txt"
-    if filename == "input_dir/host.txt":
+                        data_dict_2[FIELDS_2[j]] = str(f[i + 1])
+    filename = HOST_INPUT_FILE
+    if filename == HOST_INPUT_FILE:
         f = open(filename, 'r')
         f = f.read()
         f = f.replace("\n", "")
@@ -240,7 +255,7 @@ def make_form(root, fields):
     :param fields: array of strings that include the field names to createb the form according to
     :return: an array of Tkinter entries
     """
-    makeLabel(root)
+    make_label(root)
     entries = {}
     i = 0
     # data = read_txt_to_lst("answers.txt")
@@ -254,7 +269,7 @@ def make_form(root, fields):
         else:
             ent = Entry(row)
             if type(data[field]) != list and data[field].startswith("-"):
-                # print(data[field][3:])
+                print(data[field][3:])
                 ent.insert(0, data[field][3:])
             else:
                 if type(data[field]) == list:
@@ -305,7 +320,7 @@ def read(ents):
     return
 
 
-def makeLabel(root):
+def make_label(root):
     """
     This function adds the GUI heading
     :param root: root Tkinter window
@@ -361,9 +376,9 @@ def submit(entries):
     #     txt_result.config(text="Passwords do not match!", fg="red")
 
     if cont:
-        dict = {}
+        my_dict = {}
         for i in range(len(entries)):
-            dict[FIELDS_2[i]] = entries[FIELDS_2[i]].get()
+            my_dict[FIELDS_2[i]] = entries[FIELDS_2[i]].get()
         #
         # users_list = []
         # if os.path.exists(USERS_FILENAME) and os.stat(USERS_FILENAME).st_size != 0:
@@ -375,9 +390,9 @@ def submit(entries):
         # print(dict)
 
         # interfaces_file = str(entries[FIELDS_2[0]].get()).replace(" ", "") + ".json"
-        interfaces_file = OUTPUT_DIR + "interfaces.txt"
-        resolve_file = OUTPUT_DIR + "resolve.txt"
-        host_file = OUTPUT_DIR + "host.txt"
+        interfaces_file = INTERFACES_OUTPUT_FILE
+        resolve_file = RESOLVE_OUTPUT_FILE
+        host_file = HOST_OUTPUT_FILE
 
         # with open(filename,
         #           "w") as write_file:  # change "w" to "a" if you want to append instead of overwrite
@@ -388,22 +403,22 @@ def submit(entries):
         for i in range(len(FIELDS_2)):
             if FIELDS_2[i] in ['iface', 'inet', 'address', 'netmask', 'gateway']:
                 if i >= 1:
-                    interfaces_file.write(FIELDS_2[i] + " " + dict[FIELDS_2[i]] + "\n")
+                    interfaces_file.write(FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + "\n")
                 else:
-                    interfaces_file.write(FIELDS_2[i] + " " + dict[FIELDS_2[i]] + " ")
+                    interfaces_file.write(FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + " ")
             if FIELDS_2[i] in ['domain', 'nameserver']:
                 if FIELDS_2[i] == 'domain':
-                    resolve_file.write(FIELDS_2[i] + "           " + dict[FIELDS_2[i]] + "\n")
+                    resolve_file.write(FIELDS_2[i] + "           " + my_dict[FIELDS_2[i]] + "\n")
                 if FIELDS_2[i] == 'nameserver':
-                    dict[FIELDS_2[i]] = dict[FIELDS_2[i]].replace(" ", "")
-                    dict[FIELDS_2[i]] = dict[FIELDS_2[i]].split(",")
-                    dict[FIELDS_2[i]] = dict[FIELDS_2[i]][::-1]
-                    for j in dict[FIELDS_2[i]]:
+                    my_dict[FIELDS_2[i]] = my_dict[FIELDS_2[i]].replace(" ", "")
+                    my_dict[FIELDS_2[i]] = my_dict[FIELDS_2[i]].split(",")
+                    my_dict[FIELDS_2[i]] = my_dict[FIELDS_2[i]][::-1]
+                    for j in my_dict[FIELDS_2[i]]:
                         # print(j)
                         if j != "":
                             resolve_file.write(FIELDS_2[i] + "       " + j + "\n")
             if FIELDS_2[i] == 'hostname':
-                host_file.write(FIELDS_2[i] + "           " + dict[FIELDS_2[i]] + "\n")
+                host_file.write(FIELDS_2[i] + "           " + my_dict[FIELDS_2[i]] + "\n")
 
         # interfaces_file.write("\n")
         # resolve_file.write("\n")
@@ -453,6 +468,7 @@ def clear(entries, on_submit=False):
     This function is executed when the users clicks the "clear" button.
     It resets the entire form
     :param entries: an array of entries to clear
+    :param on_submit: if clear on submit or not in order to display the correct message
     :return: void
     """
     for i in range(len(FIELDS_2)):
@@ -462,7 +478,7 @@ def clear(entries, on_submit=False):
     return
 
 
-def quit():
+def quit_program():
     """
     This function is executed when the users clicks the "quit" button.
     It quits the entire application
@@ -471,7 +487,7 @@ def quit():
     result = messagebox.askquestion(
         'Khwarizm Consulting', 'Are you sure you want to exit?', icon="warning")
     if result == 'yes':
-        root.destroy()
+        my_root.destroy()
     return
 
 
@@ -482,7 +498,7 @@ def text_alert():
     :return: void
     """
     global txt_result
-    txt_result = Label(root)
+    txt_result = Label(my_root)
     txt_result.pack()
     return
 
@@ -492,12 +508,12 @@ def create_buttons():
     This function creates 3 buttons (submit, clear, and quit) and associates them with the appropriate methods
     :return: void
     """
-    top = Frame(root)
+    top = Frame(my_root)
     top.pack(side=TOP)
-    submit_button = Button(root, text="Submit", command=(lambda e=ents: submit(e)))
-    read_button = Button(root, text="Read", command=(lambda e=ents: read(e)))
-    clear_button = Button(root, text="Clear", command=(lambda e=ents: clear(e)))
-    quit_button = Button(root, text="Quit", command=quit)
+    submit_button = Button(my_root, text="Submit", command=lambda: submit(my_ents))
+    read_button = Button(my_root, text="Read", command=lambda: read(my_ents))
+    clear_button = Button(my_root, text="Clear", command=lambda: clear(my_ents))
+    quit_button = Button(my_root, text="Quit", command=quit_program)
     submit_button.pack(in_=top, side=LEFT)
     read_button.pack(in_=top, side=LEFT)
     clear_button.pack(in_=top, side=LEFT)
@@ -510,14 +526,15 @@ def initialise_window():
     This function initialises the Tkinter GUI window
     :return: root Tkinter window
     """
-    global root, ents
-    root = Tk()
-    ents = make_form(root, FIELDS_2)
-    root.geometry("800x600")
-    root.title("Khwarizm Consulting")
-    root.bind('<Return>', (lambda event, e=ents: fetch(e)))
-    return root
+    global my_root, my_ents
+    my_root = Tk()
+    my_ents = make_form(my_root, FIELDS_2)
+    my_root.geometry("800x600")
+    my_root.title("Khwarizm Consulting")
+    # root.bind('<Return>', (lambda event, e=ents: fetch(e)))
+    return my_root
 
 
 # calling function to initialise the GUI window
-root = initialise_window()
+# my_root = initialise_window()
+my_root = initialise_window()

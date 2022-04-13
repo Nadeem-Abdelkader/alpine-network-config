@@ -12,7 +12,7 @@ GUI framework = Tkinter
 # !/usr/bin/env python3
 
 # importing the helper functions from functions.py
-from functions import text_alert, create_buttons, root
+from functions import text_alert, create_buttons, my_root
 
 """
 On Startup
@@ -49,4 +49,4 @@ if __name__ == '__main__':
     """
     text_alert()
     create_buttons()
-    root.mainloop()
+    my_root.mainloop()
