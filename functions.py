@@ -12,8 +12,6 @@ This file contains the helper function to be called from main.py
 """
 
 # importing the necessary libraries for working with json
-# import json
-import os
 from tkinter import Frame, Label, Entry, X, LEFT, RIGHT, YES, messagebox, Button, Tk, TOP
 
 # declaring the constants to be used everywhere in the module
@@ -25,25 +23,12 @@ FIELDS_2 = ['iface', 'inet', 'address', 'netmask', 'gateway', 'domain', 'nameser
 DISPlAY_FIELDS = ['Interface', 'Internet Networking', 'IP address', 'Netmask', 'Gateway', 'Domain', 'Name Servers',
                   'Host Name']
 
-# INPUT_DIR = os.getcwd() + "/input_dir/"
-# OUTPUT_DIR = os.getcwd() + "/output_dir/"
-BASE_DIR = os.getcwd() + "/tmp/"
+BASE_DIR = "/usr/local/KC"
 
-ANSWERS_FILE = BASE_DIR + "answers.txt"
-HOST_FILE = BASE_DIR + "host.txt"
-INTERFACES_FILE = BASE_DIR + "interfaces.txt"
-RESOLVE_FILE = BASE_DIR + "resolve.txt"
-
-# ANSWERS_INPUT_FILE = INPUT_DIR + "answers.txt"
-# ANSWERS_OUTPUT_FILE = OUTPUT_DIR + "answers.txt"
-# DHCP_INPUT_FILE = INPUT_DIR + "dhcp.txt"
-# DHCP_OUTPUT_FILE = OUTPUT_DIR + "dhcp.txt"
-# HOST_INPUT_FILE = INPUT_DIR + "host.txt"
-# HOST_OUTPUT_FILE = OUTPUT_DIR + "host.txt"
-# INTERFACES_INPUT_FILE = INPUT_DIR + "interfaces.txt"
-# INTERFACES_OUTPUT_FILE = OUTPUT_DIR + "interfaces.txt"
-# RESOLVE_INPUT_FILE = INPUT_DIR + "resolve.txt"
-# RESOLVE_OUTPUT_FILE = OUTPUT_DIR + "resolve.txt"
+ANSWERS_FILE = BASE_DIR + "/config/answers.txt"
+HOST_FILE = BASE_DIR + "/etc/hostname.txt"
+INTERFACES_FILE = BASE_DIR + "/etc/network/interfaces.txt"
+RESOLVE_FILE = BASE_DIR + "/etc/resolve.conf"
 
 MANUAL = True
 
@@ -79,33 +64,10 @@ data_dict_2 = {
 
 def write_answers_txt():
     cont = True
-    # for i in range(len((entries))):
-    #     if entries[FIELDS[i]].get() == "":
-    #         cont = False
-    #         txt_result.config(
-    #             text="Please complete the required field!", fg="red")
-    # if entries[FIELDS[3]].get() != entries[FIELDS[4]].get():
-    #     cont = False
-    #     txt_result.config(text="Passwords do not match!", fg="red")
 
     if cont:
         my_dict = read_to_dict_1(ANSWERS_FILE)
-        #
-        # users_list = []
-        # if os.path.exists(USERS_FILENAME) and os.stat(USERS_FILENAME).st_size != 0:
-        #     users_list = read_from_json(USERS_FILENAME)
-        #     users_list.append(dict)
-        # else:
-        #     users_list.append(dict)
-
-        # print(dict)
-
-        # filename = str(entries[FIELDS_1[0]].get()).replace(" ", "") + ".json"
-        # filename = "/Users/nadeem/Documents/Khwarizm/Alpine/alpine-install/records/" + filename
         filename = ANSWERS_FILE
-        # with open(filename,
-        #           "w") as write_file:  # change "w" to "a" if you want to append instead of overwrite
-        #     json.dump(dict, write_file, indent=4)
         comments = ["# Example answer file for setup-alpine script\n"
                     "# If you don't want to use a certain option, then comment it out\n\n"
                     "# Use US layout with US variant\n",
@@ -171,14 +133,11 @@ def read_to_dict_2():
     """
     filename = INTERFACES_FILE
     data_dict_2['nameserver'] = []
-    # print(filename)
-    # print(INTERFACES_FILE)
     if filename == INTERFACES_FILE:
         f = open(filename, 'r')
         f = f.read()
         f = f.replace('\n', ' ')
         f = f.split(' ')
-        # print(f)
         for i in range(len(f)):
             for j in range(len(FIELDS_2)):
                 if f[i] == FIELDS_2[j]:
@@ -207,22 +166,11 @@ def read_to_dict_2():
         f = f.read()
         f = f.replace("\n", "")
         f = f.split("           ")
-        # print(f)
         for i in range(len(f)):
             for j in range(len(FIELDS_2)):
                 if f[i] == FIELDS_2[j]:
                     data_dict_2[FIELDS_2[j]] = f[i + 1]
-    # TEMPORARY
-    # data_dict_2['hostname'] = "myhost"
     return data_dict_2
-
-
-# data1 = read_to_dict_1("input_dir/answers.txt")
-# print(data1)
-
-
-# data2 = read_to_dict_2()
-# print(data2)
 
 
 def read_txt_to_lst(filename):
@@ -232,12 +180,8 @@ def read_txt_to_lst(filename):
     :return: list containing the data
     """
     mylines = []
-    # of = open(filename, 'rt')
-    # s = of.readlines()
-    # print(s)
     with open(filename, 'rt') as myfile:
         for myline in myfile:
-            # print(myline)
             if myline.startswith(FIELDS_2[0]) or myline.startswith(FIELDS_2[1]) or myline.startswith(
                     FIELDS_2[2]) or \
                     myline.startswith(FIELDS_2[3]) or myline.startswith(FIELDS_2[4]) or myline.startswith(FIELDS_2[5]) \
@@ -247,7 +191,6 @@ def read_txt_to_lst(filename):
                     myline.startswith(FIELDS_2[11]):
                 start = myline.find("\"")
                 end = myline.rfind("\"")
-                # print(myline[start+1:end])
                 if myline[start + 1:end].startswith("-"):
                     mylines.append(myline[start + 4:end])
                 else:
@@ -265,9 +208,7 @@ def make_form(root, fields):
     make_label(root)
     entries = {}
     i = 0
-    # data = read_txt_to_lst("answers.txt")
     data = read_to_dict_2()
-    # print(data)
     for field in fields:
         row = Frame(root)
         lab = Label(row, width=22, text=DISPlAY_FIELDS[i] + ": ", anchor='w')
@@ -306,15 +247,11 @@ def read(ents):
     :param ents: entries to re populate
     :return: void
     """
-    # data = read_txt_to_lst("answers.txt")
 
     data = read_to_dict_2()
     for i in range(len(FIELDS_2)):
         ents[FIELDS_2[i]].delete(0, 'end')
         if FIELDS_2[i] == 'nameserver':
-            # data[FIELDS_2[i]] = data[FIELDS_2[i]].replace(" ", "")
-            # data[FIELDS_2[i]] = data[FIELDS_2[i]].split(",")
-            # data[FIELDS_2[i]] = data[FIELDS_2[i]][::-1]
             data[FIELDS_2[i]] = list(dict.fromkeys(data[FIELDS_2[i]]))
             for j in data[FIELDS_2[i]]:
                 ents[FIELDS_2[i]].insert(0, j + ", ")
@@ -339,32 +276,6 @@ def make_label(root):
     return
 
 
-# def read_from_json(filename):
-#     """
-#     This function reads the previous users data from a .json file that can contain 0 or more json objects
-#     (stored as an array of json objects)
-#     :param filename: file to get the records from
-#     :return: an array of json objects
-#     """
-#     input_file = open(filename)
-#     json_array = json.load(input_file)
-#     user_list = []
-#
-#     for user in json_array:
-#         user_details = {FIELDS[0]: None, FIELDS[1]: None, FIELDS[2]: None, FIELDS[3]: None,
-#                         FIELDS[4]: None, FIELDS[5]: None, FIELDS[6]: None, FIELDS[7]: None,
-#                         FIELDS[8]: None, FIELDS[9]: None, FIELDS[10]: None, FIELDS[0]: user[FIELDS[0]],
-#                         FIELDS[1]: user[FIELDS[1]], FIELDS[2]: user[FIELDS[2]],
-#                         FIELDS[3]: user[FIELDS[3]], FIELDS[4]: user[FIELDS[4]],
-#                         FIELDS[5]: user[FIELDS[5]], FIELDS[6]: user[FIELDS[6]],
-#                         FIELDS[7]: user[FIELDS[7]], FIELDS[8]: user[FIELDS[8]],
-#                         FIELDS[9]: user[FIELDS[9]], FIELDS[10]: user[FIELDS[10]]}
-#
-#         user_list.append(user_details)
-#
-#     return user_list
-
-
 def submit(entries):
     """
     This function is executed when the user fills in all the inforamtion and clicks submit.
@@ -373,37 +284,16 @@ def submit(entries):
     :return: void
     """
     cont = True
-    # for i in range(len((entries))):
-    #     if entries[FIELDS[i]].get() == "":
-    #         cont = False
-    #         txt_result.config(
-    #             text="Please complete the required field!", fg="red")
-    # if entries[FIELDS[3]].get() != entries[FIELDS[4]].get():
-    #     cont = False
-    #     txt_result.config(text="Passwords do not match!", fg="red")
 
     if cont:
         my_dict = {}
         for i in range(len(entries)):
             my_dict[FIELDS_2[i]] = entries[FIELDS_2[i]].get()
-        #
-        # users_list = []
-        # if os.path.exists(USERS_FILENAME) and os.stat(USERS_FILENAME).st_size != 0:
-        #     users_list = read_from_json(USERS_FILENAME)
-        #     users_list.append(dict)
-        # else:
-        #     users_list.append(dict)
 
-        # print(dict)
-
-        # interfaces_file = str(entries[FIELDS_2[0]].get()).replace(" ", "") + ".json"
         interfaces_file = INTERFACES_FILE
         resolve_file = RESOLVE_FILE
         host_file = HOST_FILE
 
-        # with open(filename,
-        #           "w") as write_file:  # change "w" to "a" if you want to append instead of overwrite
-        #     json.dump(dict, write_file, indent=4)
         interfaces_file = open(interfaces_file, 'w')
         resolve_file = open(resolve_file, 'w')
         host_file = open(host_file, 'w')
@@ -427,46 +317,11 @@ def submit(entries):
             if FIELDS_2[i] == 'hostname':
                 host_file.write(FIELDS_2[i] + "           " + my_dict[FIELDS_2[i]] + "\n")
 
-        # interfaces_file.write("\n")
-        # resolve_file.write("\n")
-        # host_file.write("\n")
-
-        # jsonString = json.dumps(users_list, indent=4)
-        # jsonFile = open(USERS_FILENAME, "w")
-        # jsonFile.write(jsonString)
-        # jsonFile.close()
         write_answers_txt()
         txt_result.config(text="Successfully submitted data!", fg="green")
 
         clear(entries, True)
 
-    """
-    After submitting
-    
-    Enable and run dbus for GUI
-    
-    # rc-service dbus start
-    # rc-update add dbus
-    
-    Enable and run lxdm
-    
-    # rc-service lxdm start
-    # rc-update add lxdm
-    
-    import os
-
-    cmd = 'rc-service dbus start'
-    os.system(cmd)
-    
-    cmd = 'rc-update add dbus'
-    os.system(cmd)
-    
-    cmd = 'rc-service lxdm start'
-    os.system(cmd)
-    
-    cmd = 'rc-update add lxdm'
-    os.system(cmd)
-    """
     return
 
 
@@ -543,5 +398,4 @@ def initialise_window():
 
 
 # calling function to initialise the GUI window
-# my_root = initialise_window()
 my_root = initialise_window()
