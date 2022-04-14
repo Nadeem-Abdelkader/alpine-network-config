@@ -270,7 +270,7 @@ def make_label(root):
     :return: void
     """
     txt_title = Label(root, width=0, font=(
-        'arial', 24), text="Khwarizm Consulting")
+        'arial', 1), text="")
     txt_title.pack(side=TOP, padx=5, pady=5)
     return
 
@@ -346,7 +346,7 @@ def quit_program():
     :return: void
     """
     result = messagebox.askquestion(
-        'Khwarizm Consulting', 'Are you sure you want to exit?', icon="warning")
+        'Alpine Network Configuration', 'Are you sure you want to exit?', icon="warning")
     if result == 'yes':
         my_root.destroy()
     return
@@ -390,8 +390,8 @@ def initialise_window():
     global my_root, my_ents
     my_root = Tk()
     my_ents = make_form(my_root, FIELDS_2)
-    my_root.geometry("800x425")
-    my_root.title("Khwarizm Consulting")
+    my_root.geometry("800x400")
+    my_root.title("Alpine Network Configuration")
     # root.bind('<Return>', (lambda event, e=ents: fetch(e)))
     return my_root
 
