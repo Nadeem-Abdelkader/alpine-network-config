@@ -152,7 +152,6 @@ def read_to_dict_2():
         f = list(filter(bool, f))
         f = list(filter(len, f))
         f = list(filter(lambda item: item, f))
-        # print(f)
         for i in range(len(f)):
             for j in range(len(FIELDS_2)):
                 if f[i] == FIELDS_2[j]:
