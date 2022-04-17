@@ -25,10 +25,16 @@ DISPlAY_FIELDS = ['Interface', 'Internet Networking', 'IP address', 'Netmask', '
 
 BASE_DIR = "/usr/local/KC"
 
-ANSWERS_FILE = BASE_DIR + "/config/answers.txt"
-HOST_FILE = BASE_DIR + "/etc/hostname.txt"
-INTERFACES_FILE = BASE_DIR + "/etc/network/interfaces.txt"
-RESOLVE_FILE = BASE_DIR + "/etc/resolve.conf"
+# For development
+OS_BASE_DIR = BASE_DIR
+
+# For production
+# OS_BASE_DIR = "/"
+
+ANSWERS_FILE = OS_BASE_DIR + "/config/answers.txt"
+HOST_FILE = OS_BASE_DIR + "/etc/hostname.txt"
+INTERFACES_FILE = OS_BASE_DIR + "/etc/network/interfaces.txt"
+RESOLVE_FILE = OS_BASE_DIR + "/etc/resolve.conf"
 
 MANUAL = True
 
