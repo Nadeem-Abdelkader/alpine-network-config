@@ -18,10 +18,10 @@ from tkinter import Frame, Label, Entry, X, LEFT, RIGHT, YES, messagebox, Button
 FIELDS_1 = ['KEYMAPOPTS', 'HOSTNAMEOPTS', 'INTERFACESOPTS', 'DNSOPTS', 'TIMEZONEOPTS', 'PROXYOPTS',
             'APKREPOSOPTS', 'SSHDOPTS', 'NTPOPTS', 'DISKOPTS', 'LBUOPTS', 'APKCACHEOPTS']
 
-FIELDS_2 = ['iface', 'inet', 'address', 'netmask', 'gateway', 'domain', 'nameserver', 'hostname']
+FIELDS_2 = ['iface', 'inet', 'address', 'netmask', 'gateway', 'hostname', 'domain', 'nameserver']
 
-DISPlAY_FIELDS = ['Interface', 'Internet Networking', 'IP address', 'Netmask', 'Gateway', 'Domain', 'Name Servers',
-                  'Host Name']
+DISPlAY_FIELDS = ['Interface', 'Internet Networking', 'IP address', 'Netmask', 'Gateway', 'Host Name', 'Domain',
+                  'Name Servers']
 
 BASE_DIR = "/usr/local/KC/"
 
