@@ -1,5 +1,5 @@
 """
-ALPINE NETWORK CONFIGURATION SCREEN Application
+NETWORK CONFIGURATION SCREEN Application
 - Reads user network configuration data from multiple .txt files then allows user to edit and writes back updated data
 to .txt files
 

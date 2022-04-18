@@ -1,5 +1,5 @@
 """
-ALPINE NETWORK CONFIGURATION SCREEN Application
+NETWORK CONFIGURATION SCREEN Application
 - Reads user network configuration data from multiple .txt files then allows user to edit and writes back updated data
 to .txt files
 
@@ -357,7 +357,7 @@ def quit_program():
     :return: void
     """
     result = messagebox.askquestion(
-        'Alpine Network Configuration', 'Are you sure you want to exit?', icon="warning")
+        'Network Configuration', 'Are you sure you want to exit?', icon="warning")
     if result == 'yes':
         my_root.destroy()
     return
