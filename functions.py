@@ -408,6 +408,8 @@ def initialise_window():
     tabControl.add(Network_tab, text='Network')
     tabControl.pack()
     my_ents = make_form(my_root, FIELDS_2)
+    # 475x250 - Alpine
+    # 550x335 - Others
     my_root.geometry("550x335")
     my_root.title("Network Configuration")
     return my_root
