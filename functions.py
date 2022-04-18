@@ -221,9 +221,9 @@ def make_form(root, fields):
     data = read_to_dict_2()
     for field in fields:
         if field in ['domain', 'nameserver', 'hostname']:
-            row = Frame(Network_tab)
-        else:
             row = Frame(FQND_tab)
+        else:
+            row = Frame(Network_tab)
         lab = Label(row, width=22, text=DISPlAY_FIELDS[i] + ": ", anchor='w')
         if field == "Password" or field == "Re-enter Password":
             ent = Entry(row, show="*")
@@ -402,10 +402,10 @@ def initialise_window():
     my_root = Tk()
     my_root.resizable(False, False)
     tabControl = ttk.Notebook(my_root)
-    FQND_tab = Frame(tabControl)
     Network_tab = Frame(tabControl)
-    tabControl.add(FQND_tab, text='FQND')
+    FQND_tab = Frame(tabControl)
     tabControl.add(Network_tab, text='Network')
+    tabControl.add(FQND_tab, text='FQND')
     tabControl.pack()
     my_ents = make_form(my_root, FIELDS_2)
     # 475x250 - Alpine
