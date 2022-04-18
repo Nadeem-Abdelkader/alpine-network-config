@@ -400,7 +400,7 @@ def initialise_window():
     """
     global my_root, my_ents, FQND_tab, Network_tab
     my_root = Tk()
-    my_root.resizable(False, False)
+    my_root.resizable(True, True)
     tabControl = ttk.Notebook(my_root)
     Network_tab = Frame(tabControl)
     FQND_tab = Frame(tabControl)
@@ -410,7 +410,7 @@ def initialise_window():
     my_ents = make_form(my_root, FIELDS_2)
     # 475x250 - Alpine
     # 550x335 - Others
-    my_root.geometry("550x335")
+    my_root.geometry("475x250")
     my_root.title("Network Configuration")
     return my_root
 
