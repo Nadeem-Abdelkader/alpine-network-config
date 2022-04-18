@@ -12,7 +12,7 @@ This file contains the helper function to be called from main.py
 """
 
 # importing the necessary libraries for working with json
-from tkinter import Frame, Label, Entry, X, LEFT, RIGHT, YES, messagebox, Button, Tk, TOP, ttk, BOTTOM
+from tkinter import Frame, Label, Entry, X, LEFT, RIGHT, YES, messagebox, Button, Tk, TOP, ttk
 
 # declaring the constants to be used everywhere in the module
 FIELDS_1 = ['KEYMAPOPTS', 'HOSTNAMEOPTS', 'INTERFACESOPTS', 'DNSOPTS', 'TIMEZONEOPTS', 'PROXYOPTS',
@@ -40,7 +40,7 @@ MANUAL = True
 
 global txt_result
 global my_ents
-global tab1, tab2
+global FQND_tab, Network_tab
 
 data_dict_1 = {
     FIELDS_1[0]: "",
@@ -165,7 +165,11 @@ def read_to_dict_2():
                     if FIELDS_2[j] == 'nameserver':
                         data_dict_2[FIELDS_2[j]].append(str(f[i + 1]))
                     else:
-                        data_dict_2[FIELDS_2[j]] = str(f[i + 1])
+                        if (i + 1) < len(f):
+                            data_dict_2[FIELDS_2[j]] = str(f[i + 1])
+                        else:
+                            data_dict_2[FIELDS_2[j]] = ""
+
     filename = HOST_FILE
     if filename == HOST_FILE:
         f = open(filename, 'r')
@@ -217,21 +221,19 @@ def make_form(root, fields):
     data = read_to_dict_2()
     for field in fields:
         if field in ['domain', 'nameserver', 'hostname']:
-            row = Frame(tab2)
+            row = Frame(Network_tab)
         else:
-            row = Frame(tab1)
+            row = Frame(FQND_tab)
         lab = Label(row, width=22, text=DISPlAY_FIELDS[i] + ": ", anchor='w')
         if field == "Password" or field == "Re-enter Password":
             ent = Entry(row, show="*")
         else:
             ent = Entry(row)
             if type(data[field]) != list and data[field].startswith("-"):
-                print(data[field][3:])
                 ent.insert(0, data[field][3:])
             else:
                 if type(data[field]) == list:
                     for j in data[field]:
-                        # print(data[field])
                         ent.insert(0, j + ", ")
                 else:
                     ent.insert(0, data[field])
@@ -280,7 +282,7 @@ def make_label(root):
     :return: void
     """
     txt_title = Label(root, width=0, font=(
-        'arial', 0), text="asasa")
+        'arial', 10), text="dasdasdasda")
     txt_title.pack(side=TOP, padx=5, pady=5)
     return
 
@@ -320,7 +322,6 @@ def submit(entries):
                     my_dict[FIELDS_2[i]] = my_dict[FIELDS_2[i]].split(",")
                     my_dict[FIELDS_2[i]] = my_dict[FIELDS_2[i]][::-1]
                     for j in my_dict[FIELDS_2[i]]:
-                        # print(j)
                         if j != "":
                             resolve_file.write(FIELDS_2[i] + "       " + j + "\n")
             if FIELDS_2[i] == 'hostname':
@@ -380,7 +381,7 @@ def create_buttons():
     :return: void
     """
     top = Frame(my_root)
-    top.pack(ipadx=0, ipady=300, fill="y", expand=True)
+    top.pack(side=TOP)
     submit_button = Button(my_root, text="Submit", command=lambda: submit(my_ents), bg='#e4e4e4')
     read_button = Button(my_root, text="Read", command=lambda: read(my_ents))
     clear_button = Button(my_root, text="Clear", command=lambda: clear(my_ents))
@@ -397,18 +398,18 @@ def initialise_window():
     This function initialises the Tkinter GUI window
     :return: root Tkinter window
     """
-    global my_root, my_ents, tab1, tab2
+    global my_root, my_ents, FQND_tab, Network_tab
     my_root = Tk()
+    my_root.resizable(False, False)
     tabControl = ttk.Notebook(my_root)
-    tab1 = Frame(tabControl)
-    tab2 = Frame(tabControl)
-    tabControl.add(tab1, text='FQNI')
-    tabControl.add(tab2, text='Network')
-    tabControl.pack(expand=1, fill="both")
+    FQND_tab = Frame(tabControl)
+    Network_tab = Frame(tabControl)
+    tabControl.add(FQND_tab, text='FQND')
+    tabControl.add(Network_tab, text='Network')
+    tabControl.pack()
     my_ents = make_form(my_root, FIELDS_2)
-    my_root.geometry("800x400")
-    my_root.title("Alpine Network Configuration")
-    # root.bind('<Return>', (lambda event, e=ents: fetch(e)))
+    my_root.geometry("550x335")
+    my_root.title("Network Configuration")
     return my_root
 
 
