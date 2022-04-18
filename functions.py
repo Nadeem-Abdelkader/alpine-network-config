@@ -12,7 +12,7 @@ This file contains the helper function to be called from main.py
 """
 
 # importing the necessary libraries for working with json
-from tkinter import Frame, Label, Entry, X, LEFT, RIGHT, YES, messagebox, Button, Tk, TOP
+from tkinter import Frame, Label, Entry, X, LEFT, RIGHT, YES, messagebox, Button, Tk, TOP, ttk, BOTTOM
 
 # declaring the constants to be used everywhere in the module
 FIELDS_1 = ['KEYMAPOPTS', 'HOSTNAMEOPTS', 'INTERFACESOPTS', 'DNSOPTS', 'TIMEZONEOPTS', 'PROXYOPTS',
@@ -40,6 +40,7 @@ MANUAL = True
 
 global txt_result
 global my_ents
+global tab1, tab2
 
 data_dict_1 = {
     FIELDS_1[0]: "",
@@ -210,12 +211,15 @@ def make_form(root, fields):
     :param fields: array of strings that include the field names to createb the form according to
     :return: an array of Tkinter entries
     """
-    make_label(root)
+    # make_label(root)
     entries = {}
     i = 0
     data = read_to_dict_2()
     for field in fields:
-        row = Frame(root)
+        if field in ['domain', 'nameserver', 'hostname']:
+            row = Frame(tab2)
+        else:
+            row = Frame(tab1)
         lab = Label(row, width=22, text=DISPlAY_FIELDS[i] + ": ", anchor='w')
         if field == "Password" or field == "Re-enter Password":
             ent = Entry(row, show="*")
@@ -276,7 +280,7 @@ def make_label(root):
     :return: void
     """
     txt_title = Label(root, width=0, font=(
-        'arial', 1), text="")
+        'arial', 0), text="asasa")
     txt_title.pack(side=TOP, padx=5, pady=5)
     return
 
@@ -376,8 +380,8 @@ def create_buttons():
     :return: void
     """
     top = Frame(my_root)
-    top.pack(side=TOP)
-    submit_button = Button(my_root, text="Submit", command=lambda: submit(my_ents))
+    top.pack(ipadx=0, ipady=300, fill="y", expand=True)
+    submit_button = Button(my_root, text="Submit", command=lambda: submit(my_ents), bg='#e4e4e4')
     read_button = Button(my_root, text="Read", command=lambda: read(my_ents))
     clear_button = Button(my_root, text="Clear", command=lambda: clear(my_ents))
     quit_button = Button(my_root, text="Quit", command=quit_program)
@@ -393,8 +397,14 @@ def initialise_window():
     This function initialises the Tkinter GUI window
     :return: root Tkinter window
     """
-    global my_root, my_ents
+    global my_root, my_ents, tab1, tab2
     my_root = Tk()
+    tabControl = ttk.Notebook(my_root)
+    tab1 = Frame(tabControl)
+    tab2 = Frame(tabControl)
+    tabControl.add(tab1, text='FQNI')
+    tabControl.add(tab2, text='Network')
+    tabControl.pack(expand=1, fill="both")
     my_ents = make_form(my_root, FIELDS_2)
     my_root.geometry("800x400")
     my_root.title("Alpine Network Configuration")
