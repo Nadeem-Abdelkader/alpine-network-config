@@ -34,7 +34,7 @@ OS_BASE_DIR = BASE_DIR
 ANSWERS_FILE = OS_BASE_DIR + "config/answers.txt"
 HOST_FILE = OS_BASE_DIR + "etc/hostname.txt"
 INTERFACES_FILE = OS_BASE_DIR + "etc/network/interfaces.txt"
-RESOLVE_FILE = OS_BASE_DIR + "etc/resolve.conf"
+RESOLVE_FILE = OS_BASE_DIR + "etc/resolv.conf"
 
 MANUAL = True
 
@@ -176,10 +176,8 @@ def read_to_dict_2():
         f = f.read()
         f = f.replace("\n", "")
         f = f.split("           ")
-        for i in range(len(f)):
-            for j in range(len(FIELDS_2)):
-                if f[i] == FIELDS_2[j]:
-                    data_dict_2[FIELDS_2[j]] = f[i + 1]
+        data_dict_2[FIELDS_2[5]] = f[0]
+
     return data_dict_2
 
 
@@ -306,26 +304,38 @@ def submit(entries):
         host_file = HOST_FILE
 
         interfaces_file = open(interfaces_file, 'w')
+        interfaces_file.write("auto lo\niface lo inet loopback\n\nauto " + my_dict['iface'] + "\n")
         resolve_file = open(resolve_file, 'w')
         host_file = open(host_file, 'w')
         for i in range(len(FIELDS_2)):
             if FIELDS_2[i] in ['iface', 'inet', 'address', 'netmask', 'gateway']:
-                if i >= 1:
-                    interfaces_file.write(FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + "\n")
+                if my_dict['inet'] == 'dhcp':
+                    if FIELDS_2[i] in ['iface', 'inet']:
+                        if i >= 1:
+                            interfaces_file.write(FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + "\n")
+                        else:
+                            interfaces_file.write(FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + " ")
                 else:
-                    interfaces_file.write(FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + " ")
+                    if i >= 1:
+                        if FIELDS_2[i] != 'inet':
+                            interfaces_file.write("    " + FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + "\n")
+                        else:
+                            interfaces_file.write("" + FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + "\n")
+                    else:
+                        interfaces_file.write(FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + " ")
             if FIELDS_2[i] in ['domain', 'nameserver']:
                 if FIELDS_2[i] == 'domain':
-                    resolve_file.write(FIELDS_2[i] + "           " + my_dict[FIELDS_2[i]] + "\n")
+                    # pass
+                    resolve_file.write(FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + "\n")
                 if FIELDS_2[i] == 'nameserver':
                     my_dict[FIELDS_2[i]] = my_dict[FIELDS_2[i]].replace(" ", "")
                     my_dict[FIELDS_2[i]] = my_dict[FIELDS_2[i]].split(",")
                     my_dict[FIELDS_2[i]] = my_dict[FIELDS_2[i]][::-1]
                     for j in my_dict[FIELDS_2[i]]:
                         if j != "":
-                            resolve_file.write(FIELDS_2[i] + "       " + j + "\n")
+                            resolve_file.write(FIELDS_2[i] + " " + j + "\n")
             if FIELDS_2[i] == 'hostname':
-                host_file.write(FIELDS_2[i] + "           " + my_dict[FIELDS_2[i]] + "\n")
+                host_file.write(my_dict[FIELDS_2[i]])
 
         write_answers_txt()
         txt_result.config(text="Successfully submitted data!", fg="green")
