@@ -74,21 +74,6 @@ def write_answers_txt():
 
     if cont:
         my_dict = read_to_dict_1(ANSWERS_FILE)
-        # f = open(INTERFACES_FILE, 'r')
-        # f = f.read()
-        # f += "    hostname "
-        # f += data['hostname']
-        # my_dict['HOSTNAMEOPTS'] = my_dict['HOSTNAMEOPTS'][:2] + data['hostname']
-        # my_dict['INTERFACESOPTS'] = f
-        # my_dict['DNSOPTS'] = data['domain'] + " "
-        # j = 0
-        # for i in data['nameserver']:
-        #     if i != "":
-        #         if j == len(data['nameserver']) - 1:
-        #             my_dict['DNSOPTS'] += i
-        #         else:
-        #             my_dict['DNSOPTS'] += i + ", "
-        #     j +=1
         filename = ANSWERS_FILE
         comments = ["# Example answer file for setup-alpine script\n"
                     "# If you don't want to use a certain option, then comment it out\n\n"
@@ -222,7 +207,6 @@ def make_form(root, fields):
     :param fields: array of strings that include the field names to createb the form according to
     :return: an array of Tkinter entries
     """
-    # make_label(root)
     entries = {}
     i = 0
     data = read_to_dict_2()
@@ -335,7 +319,6 @@ def submit(entries):
                         interfaces_file.write(FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + " ")
             if FIELDS_2[i] in ['domain', 'nameserver']:
                 if FIELDS_2[i] == 'domain':
-                    # pass
                     resolve_file.write(FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + "\n")
                 if FIELDS_2[i] == 'nameserver':
                     my_dict[FIELDS_2[i]] = my_dict[FIELDS_2[i]].replace(" ", "")
@@ -346,7 +329,6 @@ def submit(entries):
                             resolve_file.write(FIELDS_2[i] + " " + j + "\n")
             if FIELDS_2[i] == 'hostname':
                 host_file.write(my_dict[FIELDS_2[i]])
-        # interfaces_file.close()
         write_answers_txt()
         txt_result.config(text="Successfully submitted data!", fg="green")
         clear(entries, True)
