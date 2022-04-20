@@ -286,8 +286,16 @@ def submit(entries):
     :param entries: an array of entries that contain the entered information
     :return: void
     """
+    # Uncomment this if you want to make all fields except 'address', 'netmask', and 'gateway' required
+    # empty_field = False
+    # for i in entries:
+    #     if i not in ['address', 'netmask', 'gateway']:
+    #         if entries[i].get() == "" or entries[i].get() == []:
+    #             empty_field = True
+    # if empty_field:
+    #     txt_result.config(text="Please complete the required field!", fg="red")
+    # else:
     cont = True
-
     if cont:
         my_dict = {}
         for i in range(len(entries)):
