@@ -32,8 +32,8 @@ OS_BASE_DIR = BASE_DIR
 # OS_BASE_DIR = "/"
 
 ANSWERS_FILE = OS_BASE_DIR + "config/answers.txt"
-HOST_FILE = OS_BASE_DIR + "etc/hostname.txt"
-INTERFACES_FILE = OS_BASE_DIR + "etc/network/interfaces.txt"
+HOST_FILE = OS_BASE_DIR + "etc/hostname"
+INTERFACES_FILE = OS_BASE_DIR + "etc/network/interfaces"
 RESOLVE_FILE = OS_BASE_DIR + "etc/resolv.conf"
 
 MANUAL = True
@@ -74,6 +74,21 @@ def write_answers_txt():
 
     if cont:
         my_dict = read_to_dict_1(ANSWERS_FILE)
+        # f = open(INTERFACES_FILE, 'r')
+        # f = f.read()
+        # f += "    hostname "
+        # f += data['hostname']
+        # my_dict['HOSTNAMEOPTS'] = my_dict['HOSTNAMEOPTS'][:2] + data['hostname']
+        # my_dict['INTERFACESOPTS'] = f
+        # my_dict['DNSOPTS'] = data['domain'] + " "
+        # j = 0
+        # for i in data['nameserver']:
+        #     if i != "":
+        #         if j == len(data['nameserver']) - 1:
+        #             my_dict['DNSOPTS'] += i
+        #         else:
+        #             my_dict['DNSOPTS'] += i + ", "
+        #     j +=1
         filename = ANSWERS_FILE
         comments = ["# Example answer file for setup-alpine script\n"
                     "# If you don't want to use a certain option, then comment it out\n\n"
@@ -93,22 +108,16 @@ def write_answers_txt():
             for i in range(len(FIELDS_1)):
                 if i < len(comments):
                     file.write(comments[i])
-                if i == 1:
-                    file.write(FIELDS_1[i] + "=\"-n " + my_dict[FIELDS_1[i]] + "\"")
-                elif i == 3:
-                    file.write(FIELDS_1[i] + "=\"-d " + my_dict[FIELDS_1[i]] + "\"")
-                elif i == 4:
-                    file.write(FIELDS_1[i] + "=\"-z " + my_dict[FIELDS_1[i]] + "\"")
-                elif i == 6:
-                    file.write(FIELDS_1[i] + "=\"-r" + my_dict[FIELDS_1[i]] + "\"")
-                elif i == 7:
-                    file.write(FIELDS_1[i] + "=\"-c " + my_dict[FIELDS_1[i]] + "\"")
-                elif i == 8:
-                    file.write(FIELDS_1[i] + "=\"-c " + my_dict[FIELDS_1[i]] + "\"")
-                elif i == 9:
-                    file.write(FIELDS_1[i] + "=\"-m " + my_dict[FIELDS_1[i]] + "\"")
+                if my_dict[FIELDS_1[i]] == "":
+                    if my_dict[FIELDS_1[i]].startswith("-"):
+                        file.write(FIELDS_1[i] + "=\"" + my_dict[FIELDS_1[i]][:2] + "" + my_dict[FIELDS_1[i]] + "\"")
+                    else:
+                        file.write(FIELDS_1[i] + "=\"" + my_dict[FIELDS_1[i]] + "\"")
                 else:
-                    file.write(FIELDS_1[i] + "=\"" + my_dict[FIELDS_1[i]] + "\"")
+                    if my_dict[FIELDS_1[i]].startswith("-"):
+                        file.write(FIELDS_1[i] + "=\"" + my_dict[FIELDS_1[i]][:2] + " " + my_dict[FIELDS_1[i]] + "\"")
+                    else:
+                        file.write(FIELDS_1[i] + "=\"" + my_dict[FIELDS_1[i]] + "\"")
                 file.write("\n")
             file.write("\n")
     return
@@ -265,10 +274,11 @@ def read(ents):
             for j in data[FIELDS_2[i]]:
                 ents[FIELDS_2[i]].insert(0, j + ", ")
         else:
-            if data[FIELDS_2[i]].startswith("-"):
-                ents[FIELDS_2[i]].insert(0, data[FIELDS_2[i]][3:])
-            else:
-                ents[FIELDS_2[i]].insert(0, data[FIELDS_2[i]])
+            if type(data[FIELDS_2[i]]) != list:
+                if data[FIELDS_2[i]].startswith("-"):
+                    ents[FIELDS_2[i]].insert(0, data[FIELDS_2[i]][3:])
+                else:
+                    ents[FIELDS_2[i]].insert(0, data[FIELDS_2[i]])
     txt_result.config(text="Successfully read data!", fg="green")
     return
 
@@ -336,10 +346,9 @@ def submit(entries):
                             resolve_file.write(FIELDS_2[i] + " " + j + "\n")
             if FIELDS_2[i] == 'hostname':
                 host_file.write(my_dict[FIELDS_2[i]])
-
+        # interfaces_file.close()
         write_answers_txt()
         txt_result.config(text="Successfully submitted data!", fg="green")
-
         clear(entries, True)
 
     return
