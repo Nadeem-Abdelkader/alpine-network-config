@@ -289,6 +289,7 @@ def submit(entries):
     # Uncomment this if you want to make all fields except 'address', 'netmask', and 'gateway' required
     # empty_field = False
     # for i in entries:
+    #     # Remove this if condition if you want to make all fields required
     #     if i not in ['address', 'netmask', 'gateway']:
     #         if entries[i].get() == "" or entries[i].get() == []:
     #             empty_field = True
