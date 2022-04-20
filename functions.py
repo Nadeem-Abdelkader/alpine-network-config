@@ -287,60 +287,60 @@ def submit(entries):
     :return: void
     """
     # Uncomment this if you want to make all fields except 'address', 'netmask', and 'gateway' required
-    # empty_field = False
-    # for i in entries:
-    #     # Remove this if condition if you want to make all fields required
-    #     if i not in ['address', 'netmask', 'gateway']:
-    #         if entries[i].get() == "" or entries[i].get() == []:
-    #             empty_field = True
-    # if empty_field:
-    #     txt_result.config(text="Please complete the required field!", fg="red")
-    # else:
-    cont = True
-    if cont:
-        my_dict = {}
-        for i in range(len(entries)):
-            my_dict[FIELDS_2[i]] = entries[FIELDS_2[i]].get()
+    empty_field = False
+    for i in entries:
+        # Remove this if condition if you want to make all fields required
+        if i not in ['address', 'netmask', 'gateway']:
+            if entries[i].get() == "" or entries[i].get() == []:
+                empty_field = True
+    if empty_field:
+        txt_result.config(text="Please complete the required field!", fg="red")
+    else:
+        cont = True
+        if cont:
+            my_dict = {}
+            for i in range(len(entries)):
+                my_dict[FIELDS_2[i]] = entries[FIELDS_2[i]].get()
 
-        interfaces_file = INTERFACES_FILE
-        resolve_file = RESOLVE_FILE
-        host_file = HOST_FILE
+            interfaces_file = INTERFACES_FILE
+            resolve_file = RESOLVE_FILE
+            host_file = HOST_FILE
 
-        interfaces_file = open(interfaces_file, 'w')
-        interfaces_file.write("auto lo\niface lo inet loopback\n\nauto " + my_dict['iface'] + "\n")
-        resolve_file = open(resolve_file, 'w')
-        host_file = open(host_file, 'w')
-        for i in range(len(FIELDS_2)):
-            if FIELDS_2[i] in ['iface', 'inet', 'address', 'netmask', 'gateway']:
-                if my_dict['inet'] == 'dhcp':
-                    if FIELDS_2[i] in ['iface', 'inet']:
+            interfaces_file = open(interfaces_file, 'w')
+            interfaces_file.write("auto lo\niface lo inet loopback\n\nauto " + my_dict['iface'] + "\n")
+            resolve_file = open(resolve_file, 'w')
+            host_file = open(host_file, 'w')
+            for i in range(len(FIELDS_2)):
+                if FIELDS_2[i] in ['iface', 'inet', 'address', 'netmask', 'gateway']:
+                    if my_dict['inet'] == 'dhcp':
+                        if FIELDS_2[i] in ['iface', 'inet']:
+                            if i >= 1:
+                                interfaces_file.write(FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + "\n")
+                            else:
+                                interfaces_file.write(FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + " ")
+                    else:
                         if i >= 1:
-                            interfaces_file.write(FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + "\n")
+                            if FIELDS_2[i] != 'inet':
+                                interfaces_file.write("    " + FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + "\n")
+                            else:
+                                interfaces_file.write("" + FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + "\n")
                         else:
                             interfaces_file.write(FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + " ")
-                else:
-                    if i >= 1:
-                        if FIELDS_2[i] != 'inet':
-                            interfaces_file.write("    " + FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + "\n")
-                        else:
-                            interfaces_file.write("" + FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + "\n")
-                    else:
-                        interfaces_file.write(FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + " ")
-            if FIELDS_2[i] in ['domain', 'nameserver']:
-                if FIELDS_2[i] == 'domain':
-                    resolve_file.write(FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + "\n")
-                if FIELDS_2[i] == 'nameserver':
-                    my_dict[FIELDS_2[i]] = my_dict[FIELDS_2[i]].replace(" ", "")
-                    my_dict[FIELDS_2[i]] = my_dict[FIELDS_2[i]].split(",")
-                    my_dict[FIELDS_2[i]] = my_dict[FIELDS_2[i]][::-1]
-                    for j in my_dict[FIELDS_2[i]]:
-                        if j != "":
-                            resolve_file.write(FIELDS_2[i] + " " + j + "\n")
-            if FIELDS_2[i] == 'hostname':
-                host_file.write(my_dict[FIELDS_2[i]])
-        write_answers_txt()
-        txt_result.config(text="Successfully submitted data!", fg="green")
-        clear(entries, True)
+                if FIELDS_2[i] in ['domain', 'nameserver']:
+                    if FIELDS_2[i] == 'domain':
+                        resolve_file.write(FIELDS_2[i] + " " + my_dict[FIELDS_2[i]] + "\n")
+                    if FIELDS_2[i] == 'nameserver':
+                        my_dict[FIELDS_2[i]] = my_dict[FIELDS_2[i]].replace(" ", "")
+                        my_dict[FIELDS_2[i]] = my_dict[FIELDS_2[i]].split(",")
+                        my_dict[FIELDS_2[i]] = my_dict[FIELDS_2[i]][::-1]
+                        for j in my_dict[FIELDS_2[i]]:
+                            if j != "":
+                                resolve_file.write(FIELDS_2[i] + " " + j + "\n")
+                if FIELDS_2[i] == 'hostname':
+                    host_file.write(my_dict[FIELDS_2[i]])
+            write_answers_txt()
+            txt_result.config(text="Successfully submitted data!", fg="green")
+            clear(entries, True)
 
     return
 
